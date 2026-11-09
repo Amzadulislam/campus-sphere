@@ -1,0 +1,1798 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CampusSphere - International Student Management System</title>
+    <link rel="icon" type="image/png" href="logo.png">
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bs-body-font-family: 'Plus Jakarta Sans', sans-serif;
+            --primary-accent: #4f46e5;
+            --primary-hover: #4338ca;
+            --brand-gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 40%, #312e81 100%);
+            --bg-canvas: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --nav-bg: rgba(255, 255, 255, 0.95);
+            --card-shadow: 0 10px 30px -5px rgba(15, 23, 42, 0.05);
+            --pill-bg: #f1f5f9;
+        }
+
+        [data-theme="dark"] {
+            --bg-canvas: #090d16;
+            --card-bg: #111827;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: #1f2937;
+            --nav-bg: rgba(17, 24, 39, 0.95);
+            --card-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.4);
+            --pill-bg: #1e293b;
+        }
+
+        body {
+            background-color: var(--bg-canvas);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            font-family: var(--bs-body-font-family);
+        }
+
+        .bg-card {
+            background-color: var(--card-bg) !important;
+            color: var(--text-main) !important;
+            border: 1px solid var(--border-color) !important;
+            box-shadow: var(--card-shadow);
+        }
+
+        .text-muted {
+            color: var(--text-muted) !important;
+        }
+
+        /* Glassmorphism Navbar */
+        .navbar {
+            background-color: var(--nav-bg) !important;
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+        .navbar-brand {
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+        .brand-logo {
+            width: 40px;
+            height: 40px;
+            object-fit: contain;
+        }
+        .navbar .nav-link,
+        .navbar .navbar-brand,
+        .navbar .dropdown-toggle,
+        .navbar .dropdown-item {
+            color: var(--text-main) !important;
+        }
+        [data-theme="dark"] .navbar .nav-link,
+        [data-theme="dark"] .navbar .navbar-brand,
+        [data-theme="dark"] .navbar .dropdown-toggle,
+        [data-theme="dark"] .navbar .dropdown-item,
+        [data-theme="dark"] .navbar .btn,
+        [data-theme="dark"] .navbar .btn-outline-primary,
+        [data-theme="dark"] .navbar .btn-outline-secondary,
+        [data-theme="dark"] .navbar .btn-primary-custom {
+            color: #f8fafc !important;
+        }
+        [data-theme="dark"] .navbar-toggler {
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+        [data-theme="dark"] .navbar-toggler-icon {
+            filter: invert(1);
+        }
+
+        /* Hero Banner Redesign */
+        .hero-banner {
+            background:
+                linear-gradient(120deg, rgba(15, 23, 42, 0.82) 0%, rgba(15, 23, 42, 0.68) 45%, rgba(79, 70, 229, 0.2) 100%),
+                url('background photot.jpg') center/cover no-repeat;
+            color: #ffffff;
+            padding: 90px 0 70px 0;
+            border-radius: 0 0 32px 32px;
+            box-shadow: 0 20px 40px rgba(15, 23, 42, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-banner::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, rgba(0, 0, 0, 0) 70%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+        .hero-title {
+            color: #ffffff !important;
+            font-weight: 800;
+            letter-spacing: -1.5px;
+            line-height: 1.15;
+        }
+        .hero-subtitle {
+            color: #cbd5e1 !important;
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+
+        /* Modern Card Styling */
+        .stat-card {
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            background-color: var(--card-bg);
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+        .home-quick-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            min-height: 76px;
+            padding: 16px;
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            background: var(--card-bg);
+            color: var(--text-main);
+            font: inherit;
+            font-weight: 600;
+            text-align: left;
+            transition: transform 0.2s ease, border-color 0.2s ease;
+        }
+        .home-quick-link i {
+            font-size: 1.25rem;
+        }
+        .home-quick-link:hover {
+            transform: translateY(-2px);
+            border-color: var(--primary-accent);
+        }
+        .home-quick-link:focus-visible,
+        .home-activity-button:focus-visible {
+            outline: 3px solid var(--primary-accent);
+            outline-offset: 3px;
+        }
+        .home-activity-button {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            background: var(--card-bg);
+            color: var(--text-main);
+            text-align: left;
+        }
+        .home-activity-button:hover {
+            border-color: var(--primary-accent);
+        }
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 30px -10px rgba(79, 70, 229, 0.15);
+        }
+
+        .product-card {
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            background-color: var(--card-bg);
+        }
+        .product-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.15);
+            border-color: var(--primary-accent) !important;
+        }
+        .product-img {
+            height: 210px;
+            object-fit: cover;
+            width: 100%;
+        }
+
+        .badge-condition {
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            backdrop-filter: blur(8px);
+            background: rgba(15, 23, 42, 0.85);
+            color: #fff;
+            padding: 5px 12px;
+            border-radius: 30px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .bbs-card {
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            transition: all 0.2s ease;
+            background-color: var(--card-bg);
+        }
+        .bbs-card:hover {
+            transform: translateY(-3px);
+            border-color: var(--primary-accent) !important;
+        }
+
+        .avatar {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .btn-primary-custom {
+            background-color: var(--primary-accent);
+            color: #ffffff;
+            border: none;
+            transition: all 0.2s ease;
+        }
+        .btn-primary-custom:hover {
+            background-color: var(--primary-hover);
+            color: #ffffff;
+            transform: translateY(-1px);
+        }
+
+        .footer {
+            margin-top: auto;
+            background: #090d16;
+            color: #64748b;
+            border-top: 1px solid #1e293b;
+        }
+
+        .modal-content {
+            border-radius: 24px;
+            border: 1px solid var(--border-color);
+            background-color: var(--card-bg);
+            color: var(--text-main);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+
+        /* Message Drawer / Inbox Styles */
+        .chat-box {
+            height: 330px;
+            overflow-y: auto;
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 16px;
+            background: var(--pill-bg);
+        }
+        .msg-bubble {
+            max-width: 80%;
+            padding: 10px 16px;
+            border-radius: 18px;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+        .msg-sent {
+            background-color: var(--primary-accent);
+            color: white;
+            margin-left: auto;
+            border-bottom-right-radius: 4px;
+        }
+        .msg-received {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            margin-right: auto;
+            border-bottom-left-radius: 4px;
+        }
+
+        #toastContainer {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 1090;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Toast Notification -->
+    <div id="toastContainer"></div>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg sticky-top py-3">
+        <div class="container">
+            <a class="navbar-brand fs-4 d-flex align-items-center gap-2" href="#" onclick="showSection('homeSection')">
+                <img src="logo.png" alt="CampusSphere logo" class="brand-logo">
+                <span class="fw-bold">CampusSphere</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto ms-lg-4 mb-2 mb-lg-0 fw-semibold">
+                    <li class="nav-item">
+                        <a class="nav-link nav-btn active" id="nav-homeSection" href="#" onclick="showSection('homeSection')">
+                            <i class="fa-solid fa-house me-1 text-primary"></i> Home
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link nav-btn" id="nav-marketSection" href="#" onclick="showSection('marketSection')">
+                            <i class="fa-solid fa-store me-1 text-success"></i> Marketplace
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link nav-btn" id="nav-bbsSection" href="#" onclick="showSection('bbsSection')">
+                            <i class="fa-solid fa-comments me-1 text-warning"></i> BBS Forum
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link nav-btn" id="nav-aboutSection" href="#" onclick="showSection('aboutSection')">
+                            <i class="fa-solid fa-circle-info me-1 text-info"></i> About
+                        </a>
+                    </li>
+                </ul>
+
+                <!-- Theme Switcher & Auth Controls -->
+                <div class="d-flex align-items-center gap-3">
+                    <!-- Dark/Light Mode Toggle -->
+                    <button class="btn btn-outline-secondary rounded-circle d-flex align-items-center justify-content-center" id="themeToggleBtn" onclick="toggleTheme()" title="Toggle Light/Dark Mode" style="width: 40px; height: 40px;">
+                        <i class="fa-solid fa-moon" id="themeIcon"></i>
+                    </button>
+
+                    <!-- Auth Controls (Logged Out) -->
+                    <div class="d-flex align-items-center gap-2" id="authControls">
+                        <button class="btn btn-outline-primary px-3 rounded-pill fw-semibold" onclick="openLoginModal()">
+                            <i class="fa-solid fa-right-to-bracket me-1"></i> Log In
+                        </button>
+                        <button class="btn btn-primary-custom px-4 py-2 rounded-pill fw-semibold" onclick="openRegisterModal()">
+                            Register
+                        </button>
+                    </div>
+
+                    <!-- Logged In User State -->
+                    <div class="d-none align-items-center gap-3" id="userState">
+                        <button class="btn btn-outline-primary position-relative rounded-pill px-3" onclick="openMessagesModal()">
+                            <i class="fa-solid fa-envelope me-1"></i> Messages
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="msgBadge">2</span>
+                        </button>
+                        <div class="dropdown">
+                            <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle" id="userDropdown" data-bs-toggle="dropdown">
+                                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80" alt="Profile" id="navUserAvatar" class="avatar me-2 border border-2 border-primary">
+                                <span class="fw-semibold" id="currentUserDisplay">Sarah Jenkins</span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end shadow border-0 rounded-4 mt-2 p-2">
+                                <li><a class="dropdown-item py-2 rounded-3" href="#" onclick="openEditProfileModal()"><i class="fa-solid fa-user me-2 text-muted"></i> My Profile</a></li>
+                                <li><a class="dropdown-item py-2 rounded-3" href="#" onclick="openUserItems()"><i class="fa-solid fa-box-open me-2 text-muted"></i> My Listings</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item py-2 rounded-3 text-danger" href="#" onclick="logoutUser()"><i class="fa-solid fa-arrow-right-from-bracket me-2"></i> Log Out</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- MAIN CONTENT SECTIONS -->
+
+    <!-- 1. HOMEPAGE SECTION -->
+    <section id="homeSection" class="content-section">
+        <div class="hero-banner mb-5 text-center text-md-start">
+            <div class="container position-relative z-1">
+                <div class="row align-items-center py-4">
+                    <div class="col-lg-7">
+                        <span class="badge bg-warning text-dark px-3 py-2 rounded-pill mb-3 text-uppercase fs-7 tracking-wide fw-bold shadow-sm">
+                            <i class="fa-solid fa-location-dot me-1"></i> Zhenjiang, China Campus Portal
+                        </span>
+                        <h1 class="display-4 hero-title mb-3">Your Campus Life, Connected.</h1>
+                        <p class="hero-subtitle mb-4">Find essentials, get practical campus guidance, and connect with other international students in Zhenjiang.</p>
+                        <div class="d-flex flex-wrap gap-3 justify-content-center justify-content-md-start">
+                            <button class="btn btn-warning text-dark btn-lg rounded-pill px-4 shadow fw-bold" onclick="openRegisterModal()">
+                                Get Started <i class="fa-solid fa-arrow-right ms-2"></i>
+                            </button>
+                            <button class="btn btn-outline-light btn-lg rounded-pill px-4 fw-semibold" onclick="showSection('marketSection')">
+                                <i class="fa-solid fa-store me-2"></i> Browse Marketplace
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container mb-5">
+            <div class="row g-3 mb-5" aria-label="CampusSphere activity">
+                <div class="col-sm-4">
+                    <div class="stat-card p-3 h-100">
+                        <p class="text-muted small mb-1">Marketplace listings</p>
+                        <p class="h3 fw-bold mb-0" id="statItems" aria-live="polite">0</p>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="stat-card p-3 h-100">
+                        <p class="text-muted small mb-1">Community discussions</p>
+                        <p class="h3 fw-bold mb-0" id="statThreads" aria-live="polite">0</p>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="stat-card p-3 h-100">
+                        <p class="text-muted small mb-1">Marketplace categories</p>
+                        <p class="h3 fw-bold mb-0" id="statCategories" aria-live="polite">0</p>
+                    </div>
+                </div>
+            </div>
+            <p class="text-muted small mb-4">Counts reflect listings and discussions currently loaded on this page; the starting entries are examples.</p>
+
+            <section class="mb-5" aria-labelledby="quickLinksHeading">
+                <h2 class="h4 fw-bold mb-3" id="quickLinksHeading">What do you need?</h2>
+                <div class="row g-3">
+                    <div class="col-6 col-lg-3">
+                        <button type="button" class="home-quick-link w-100 h-100" onclick="showSection('marketSection')">
+                            <i class="fa-solid fa-store text-success" aria-hidden="true"></i>
+                            <span>Browse marketplace</span>
+                        </button>
+                    </div>
+                    <div class="col-6 col-lg-3">
+                        <button type="button" class="home-quick-link w-100 h-100" onclick="openForumCategory('Visa & Legal')">
+                            <i class="fa-solid fa-passport text-primary" aria-hidden="true"></i>
+                            <span>Visa guidance</span>
+                        </button>
+                    </div>
+                    <div class="col-6 col-lg-3">
+                        <button type="button" class="home-quick-link w-100 h-100" onclick="openForumCategory('Housing & Roommates')">
+                            <i class="fa-solid fa-house text-warning" aria-hidden="true"></i>
+                            <span>Find housing advice</span>
+                        </button>
+                    </div>
+                    <div class="col-6 col-lg-3">
+                        <button type="button" class="home-quick-link w-100 h-100" onclick="showSection('bbsSection')">
+                            <i class="fa-solid fa-comments text-info" aria-hidden="true"></i>
+                            <span>Ask the community</span>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <section class="mb-5" aria-labelledby="howItWorksHeading">
+                <h2 class="h4 fw-bold mb-3" id="howItWorksHeading">How CampusSphere works</h2>
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <div class="bg-card p-4 rounded-4 h-100">
+                            <span class="badge rounded-pill bg-primary mb-3">1</span>
+                            <h3 class="h6 fw-bold">Find what you need</h3>
+                            <p class="text-muted mb-0">Browse student listings or explore practical campus guidance.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="bg-card p-4 rounded-4 h-100">
+                            <span class="badge rounded-pill bg-success mb-3">2</span>
+                            <h3 class="h6 fw-bold">Connect with students</h3>
+                            <p class="text-muted mb-0">Ask questions and share advice in the community forum.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="bg-card p-4 rounded-4 h-100">
+                            <span class="badge rounded-pill bg-warning text-dark mb-3">3</span>
+                            <h3 class="h6 fw-bold">Get settled in</h3>
+                            <p class="text-muted mb-0">Use peer tips as a starting point and confirm official requirements with your university.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section aria-labelledby="activityHeading">
+                <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-2 mb-3">
+                    <h2 class="h4 fw-bold mb-0" id="activityHeading">Fresh from the community</h2>
+                    <span class="text-muted small">Updates when listings or discussions are added</span>
+                </div>
+                <div class="row g-3">
+                    <div class="col-lg-6">
+                        <div class="bg-card p-4 rounded-4 h-100">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h3 class="h5 fw-bold mb-0"><i class="fa-solid fa-store text-success me-2" aria-hidden="true"></i>Latest listings</h3>
+                                <button type="button" class="btn btn-sm btn-outline-primary rounded-pill" onclick="showSection('marketSection')">View all</button>
+                            </div>
+                            <div id="homeRecentListings" class="d-grid gap-2" aria-live="polite"></div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="bg-card p-4 rounded-4 h-100">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h3 class="h5 fw-bold mb-0"><i class="fa-solid fa-comments text-warning me-2" aria-hidden="true"></i>Latest discussions</h3>
+                                <button type="button" class="btn btn-sm btn-outline-primary rounded-pill" onclick="showSection('bbsSection')">View all</button>
+                            </div>
+                            <div id="homeRecentThreads" class="d-grid gap-2" aria-live="polite"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </section>
+
+    <!-- 2. SECOND-HAND MARKETPLACE SECTION -->
+    <section id="marketSection" class="content-section d-none">
+        <div class="container py-4">
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3 bg-card p-4 rounded-4 shadow-sm">
+                <div>
+                    <h2 class="fw-bold mb-1"><i class="fa-solid fa-store text-success me-2"></i>Second-Hand Goods Marketplace</h2>
+                    <p class="text-muted mb-0">Buy and sell pre-loved textbooks, electric scooters, dorm furniture, and appliances with fellow students.</p>
+                </div>
+                <button class="btn btn-success btn-lg rounded-pill px-4 text-nowrap fw-semibold" onclick="checkAuthAndOpenModal('postItemModal')">
+                    <i class="fa-solid fa-plus me-1"></i> Post Item for Sale
+                </button>
+            </div>
+
+            <div class="row g-3 mb-4">
+                <div class="col-md-8">
+                    <div class="input-group">
+                        <span class="input-group-text bg-card border-end-0 rounded-start-pill ps-3"><i class="fa-solid fa-magnifying-glass text-muted"></i></span>
+                        <input type="text" id="marketSearchInput" class="form-control bg-card border-start-0 rounded-end-pill py-2.5" placeholder="Search items (e.g. Textbook, Desk, Laptop...)" onkeyup="filterMarketplace()">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <select id="marketCategorySelect" class="form-select bg-card rounded-pill py-2.5" onchange="filterMarketplace()">
+                        <option value="All">All Categories</option>
+                        <option value="Textbooks">Textbooks & Books</option>
+                        <option value="Electronics">Electronics & Gadgets</option>
+                        <option value="Furniture">Furniture & Home</option>
+                        <option value="Clothing">Clothing & Accessories</option>
+                        <option value="Others">Others</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="row g-4" id="marketGrid">
+                <!-- Dynamically Populated by JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. BBS DISCUSSION BOARD SECTION -->
+    <section id="bbsSection" class="content-section d-none">
+        <div class="container py-4">
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3 bg-card p-4 rounded-4 shadow-sm">
+                <div>
+                    <h2 class="fw-bold mb-1"><i class="fa-solid fa-comments text-warning me-2"></i>BBS Student Forum</h2>
+                    <p class="text-muted mb-0">Ask questions, share advice, discuss campus life, and stay informed with fellow international students.</p>
+                </div>
+                <button class="btn btn-warning text-white btn-lg rounded-pill px-4 text-nowrap fw-semibold" onclick="checkAuthAndOpenModal('newThreadModal')">
+                    <i class="fa-solid fa-pen-to-square me-1"></i> Create Discussion
+                </button>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-lg-8">
+                    <div class="bg-card p-3 rounded-4 shadow-sm mb-4">
+                        <div class="d-flex flex-wrap gap-2 mb-3" id="bbsCategoryTabs">
+                            <button class="btn btn-sm btn-primary rounded-pill px-3 active" data-category="All" onclick="filterBBS('All', this)">All Topics</button>
+                            <button class="btn btn-sm btn-outline-secondary rounded-pill px-3" data-category="Visa & Legal" onclick="filterBBS('Visa & Legal', this)">Visa & Legal</button>
+                            <button class="btn btn-sm btn-outline-secondary rounded-pill px-3" data-category="Campus Life" onclick="filterBBS('Campus Life', this)">Campus Life</button>
+                            <button class="btn btn-sm btn-outline-secondary rounded-pill px-3" data-category="Housing & Roommates" onclick="filterBBS('Housing & Roommates', this)">Housing</button>
+                            <button class="btn btn-sm btn-outline-secondary rounded-pill px-3" data-category="Academic Help" onclick="filterBBS('Academic Help', this)">Academic</button>
+                        </div>
+                        <input type="text" id="bbsSearchInput" class="form-control bg-card rounded-pill py-2" placeholder="Search forum posts..." onkeyup="searchBBS()">
+                    </div>
+
+                    <div class="d-flex flex-column gap-3" id="bbsThreadList">
+                        <!-- Dynamically Populated -->
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="bg-card p-4 rounded-4 shadow-sm mb-4">
+                        <h5 class="fw-bold mb-3"><i class="fa-solid fa-fire text-danger me-2"></i>Hot Topics</h5>
+                        <ul class="list-unstyled mb-0">
+                            <li class="mb-3 border-bottom pb-2">
+                                <a href="#" class="text-decoration-none fw-semibold" onclick="viewThread(1)">Best banks for setting up international student accounts?</a>
+                                <div class="text-muted small mt-1"><i class="fa-regular fa-comment me-1"></i> 24 Replies</div>
+                            </li>
+                            <li class="mb-3 border-bottom pb-2">
+                                <a href="#" class="text-decoration-none fw-semibold" onclick="viewThread(2)">How to register for Part-Time work permits on campus?</a>
+                                <div class="text-muted small mt-1"><i class="fa-regular fa-comment me-1"></i> 18 Replies</div>
+                            </li>
+                            <li class="mb-0">
+                                <a href="#" class="text-decoration-none fw-semibold" onclick="viewThread(3)">Weekend Trip Recommendations around Zhenjiang?</a>
+                                <div class="text-muted small mt-1"><i class="fa-regular fa-comment me-1"></i> 12 Replies</div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="p-4 rounded-4 border" style="background: rgba(79, 70, 229, 0.08); border-color: rgba(79, 70, 229, 0.2) !important;">
+                        <h5 class="fw-bold text-primary mb-2"><i class="fa-solid fa-shield-halved me-2"></i>Forum Guidelines</h5>
+                        <p class="small text-muted mb-0">Please keep all discussions respectful, helpful, and relevant to the international student community. Commercial spam is strictly monitored.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. ABOUT SECTION WITH ESSENTIAL IMPORTANCE & CONTACT INFO -->
+    <section id="aboutSection" class="content-section d-none">
+        <div class="container py-4">
+            <!-- Main Hero Card -->
+            <div class="bg-card p-4 p-md-5 rounded-4 shadow-sm mb-4">
+                <div class="row align-items-center">
+                    <div class="col-lg-8">
+                        <span class="badge bg-primary px-3 py-2 rounded-pill mb-3 fw-bold">Zhenjiang Campus System</span>
+                        <h2 class="fw-bold mb-3">Why This International Student System is Essential</h2>
+                        <p class="lead text-muted mb-4">Moving to China for higher education presents unique challenges—ranging from language barriers and visa registration processes to setting up daily payment accounts and obtaining affordable dorm necessities.</p>
+                    </div>
+                    <div class="col-lg-4 text-center">
+                        <div class="p-4 rounded-4 border" style="background: rgba(79, 70, 229, 0.08);">
+                            <i class="fa-solid fa-earth-asia text-primary display-1"></i>
+                            <h5 class="fw-bold text-primary mt-2">Study in China Portal</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Key Reasons / Value Proposition -->
+            <div class="row g-4 mb-4">
+                <div class="col-md-4">
+                    <div class="bg-card p-4 rounded-4 shadow-sm h-100 border-top border-4 border-primary">
+                        <i class="fa-solid fa-handshake-angle fa-2x text-primary mb-3"></i>
+                        <h5 class="fw-bold">1. Seamless Peer Support</h5>
+                        <p class="text-muted small mb-0">Helps international freshmen quickly adapt to campus regulations, visa procedures, residence permits, and medical insurance without language obstacles.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="bg-card p-4 rounded-4 shadow-sm h-100 border-top border-4 border-success">
+                        <i class="fa-solid fa-recycle fa-2x text-success mb-3"></i>
+                        <h5 class="fw-bold">2. Sustainable Trading</h5>
+                        <p class="text-muted small mb-0">Graduating international students can pass down textbooks, furniture, and bicycles to new students, reducing waste and saving money.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="bg-card p-4 rounded-4 shadow-sm h-100 border-top border-4 border-warning">
+                        <i class="fa-solid fa-comments-dollar fa-2x text-warning mb-3"></i>
+                        <h5 class="fw-bold">3. Direct Community Messaging</h5>
+                        <p class="text-muted small mb-0">Integrates direct messaging so buyers, sellers, and forum members can connect easily, organize campus meetings, and build strong friendships.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact Information Card -->
+            <div class="bg-card p-4 p-md-5 rounded-4 shadow-sm">
+                <h4 class="fw-bold mb-4 text-primary"><i class="fa-solid fa-address-card me-2"></i>Contact Us & Support Center</h4>
+                <div class="row g-4">
+                    <div class="col-md-4">
+                        <div class="d-flex align-items-center p-3 rounded-3 border" style="background: var(--pill-bg)">
+                            <i class="fa-solid fa-location-dot fa-2x text-danger me-3"></i>
+                            <div>
+                                <small class="text-muted fw-bold d-block">LOCATION / ADDRESS</small>
+                                <span class="fw-semibold">Zhenjiang, Jiangsu, China</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="d-flex align-items-center p-3 rounded-3 border" style="background: var(--pill-bg)">
+                            <i class="fa-solid fa-envelope fa-2x text-primary me-3"></i>
+                            <div>
+                                <small class="text-muted fw-bold d-block">EMAIL ADDRESS</small>
+                                <a href="mailto:amzadulislam413@gmail.com" class="fw-semibold text-decoration-none">amzadulislam413@gmail.com</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="d-flex align-items-center p-3 rounded-3 border" style="background: var(--pill-bg)">
+                            <i class="fa-solid fa-phone fa-2x text-success me-3"></i>
+                            <div>
+                                <small class="text-muted fw-bold d-block">PHONE / CONTACT</small>
+                                <a href="tel:18652842380" class="fw-semibold text-decoration-none">+86 18652842380</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- MODALS -->
+
+    <!-- Modal 1: Login -->
+    <div class="modal fade" id="loginModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content p-3">
+                <div class="modal-header border-0 pb-0">
+                    <h4 class="modal-title fw-bold"><i class="fa-solid fa-right-to-bracket text-primary me-2"></i>Welcome Back</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="loginForm" onsubmit="handleLogin(event)">
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Student Email</label>
+                            <input type="email" id="loginEmail" class="form-control bg-card rounded-3 py-2.5" placeholder="student@university.edu" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Password</label>
+                            <input type="password" id="loginPassword" class="form-control bg-card rounded-3 py-2.5" placeholder="••••••••" required>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="rememberMe">
+                                <label class="form-check-label small" for="rememberMe">Remember me</label>
+                            </div>
+                            <a href="#" class="small text-decoration-none">Forgot password?</a>
+                        </div>
+                        <button type="submit" class="btn btn-primary-custom w-100 rounded-pill py-2.5 fw-semibold">Log In</button>
+                    </form>
+                    <div class="text-center mt-3">
+                        <span class="small text-muted">Don't have an account? </span>
+                        <button class="btn btn-link p-0 small text-primary fw-bold text-decoration-none" onclick="switchToRegisterModal()">Register Now</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal 2: Register -->
+    <div class="modal fade" id="registerModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content p-3">
+                <div class="modal-header border-0 pb-0">
+                    <h4 class="modal-title fw-bold"><i class="fa-solid fa-user-plus text-success me-2"></i>Create Account</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="registerForm" onsubmit="handleRegister(event)">
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Full Name</label>
+                            <input type="text" id="regName" class="form-control bg-card rounded-3 py-2" placeholder="e.g. Amzadul Islam" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Student Email</label>
+                            <input type="email" id="regEmail" class="form-control bg-card rounded-3 py-2" placeholder="student@university.edu" required>
+                        </div>
+                        <div class="row g-2 mb-3">
+                            <div class="col-6">
+                                <label class="form-label fw-semibold">Student ID</label>
+                                <input type="text" id="regStudentID" class="form-control bg-card rounded-3 py-2" placeholder="INT-2026-XXXX" required>
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label fw-semibold">Home Country</label>
+                                <input type="text" id="regCountry" class="form-control bg-card rounded-3 py-2" placeholder="e.g. Bangladesh" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Password</label>
+                            <input type="password" id="regPassword" class="form-control bg-card rounded-3 py-2" placeholder="At least 6 characters" minlength="6" required>
+                        </div>
+                        <button type="submit" class="btn btn-success w-100 rounded-pill py-2.5 fw-semibold">Create Account</button>
+                    </form>
+                    <div class="text-center mt-3">
+                        <span class="small text-muted">Already have an account? </span>
+                        <button class="btn btn-link p-0 small text-primary fw-bold text-decoration-none" onclick="switchToLoginModal()">Log In</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal 2.5: My Profile & Edit Profile -->
+    <div class="modal fade" id="profileModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content p-3">
+                <div class="modal-header border-0 pb-0">
+                    <h4 class="modal-title fw-bold"><i class="fa-solid fa-user-gear text-primary me-2"></i>My Student Profile</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <div class="position-relative d-inline-block mb-3">
+                        <img id="profileModalAvatar" src="" class="rounded-circle border border-4 border-primary shadow" style="width: 100px; height: 100px; object-fit: cover;">
+                        <label for="profileImgFileInput" class="btn btn-sm btn-primary rounded-circle position-absolute bottom-0 end-0 p-2" title="Change Photo">
+                            <i class="fa-solid fa-camera"></i>
+                        </label>
+                        <input type="file" id="profileImgFileInput" class="d-none" accept="image/*" onchange="handleAvatarFileUpload(event)">
+                    </div>
+
+                    <form id="editProfileForm" onsubmit="handleSaveProfile(event)">
+                        <div class="mb-3 text-start">
+                            <label class="form-label fw-semibold">Profile Picture Image Link / File</label>
+                            <input type="text" id="profileAvatarUrl" class="form-control bg-card rounded-3" placeholder="https://..." oninput="previewAvatarUrl(this.value)">
+                            <small class="text-muted">Click the camera icon above to upload a local photo, or paste an image URL here.</small>
+                        </div>
+                        <div class="mb-3 text-start">
+                            <label class="form-label fw-semibold">Full Name</label>
+                            <input type="text" id="profileName" class="form-control bg-card rounded-3" required>
+                        </div>
+                        <div class="mb-3 text-start">
+                            <label class="form-label fw-semibold">Student Email</label>
+                            <input type="email" id="profileEmail" class="form-control bg-card rounded-3" required>
+                        </div>
+                        <div class="row g-2 mb-3 text-start">
+                            <div class="col-6">
+                                <label class="form-label fw-semibold">Student ID</label>
+                                <input type="text" id="profileStudentID" class="form-control bg-card rounded-3" required>
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label fw-semibold">Country</label>
+                                <input type="text" id="profileCountry" class="form-control bg-card rounded-3" required>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary-custom w-100 rounded-pill py-2.5 fw-semibold"><i class="fa-solid fa-floppy-disk me-1"></i> Save Changes</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal 3: Post Second-Hand Item -->
+    <div class="modal fade" id="postItemModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content p-3">
+                <div class="modal-header border-0 pb-0">
+                    <h4 class="modal-title fw-bold"><i class="fa-solid fa-tag text-success me-2"></i>Post Item for Sale</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="postItemForm" onsubmit="handlePostItem(event)">
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Item Title</label>
+                            <input type="text" id="itemTitle" class="form-control bg-card rounded-3" placeholder="e.g. Electric Scooter / HSK 5 Textbook" required>
+                        </div>
+                        <div class="row g-2 mb-3">
+                            <div class="col-6">
+                                <label class="form-label fw-semibold">Category</label>
+                                <select id="itemCategory" class="form-select bg-card rounded-3" required>
+                                    <option value="Textbooks">Textbooks</option>
+                                    <option value="Electronics">Electronics</option>
+                                    <option value="Furniture">Furniture</option>
+                                    <option value="Clothing">Clothing</option>
+                                    <option value="Others">Others</option>
+                                </select>
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label fw-semibold">Price (¥)</label>
+                                <input type="number" id="itemPrice" class="form-control bg-card rounded-3" placeholder="150" min="0" step="1" required>
+                            </div>
+                        </div>
+                        <div class="row g-2 mb-3">
+                            <div class="col-6">
+                                <label class="form-label fw-semibold">Condition</label>
+                                <select id="itemCondition" class="form-select bg-card rounded-3" required>
+                                    <option value="Like New">Like New</option>
+                                    <option value="Good">Good</option>
+                                    <option value="Fair">Fair</option>
+                                </select>
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label fw-semibold">Contact Info</label>
+                                <input type="text" id="itemContact" class="form-control bg-card rounded-3" placeholder="WeChat / Phone" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Image Preset or Custom URL</label>
+                            <select id="itemImgPreset" class="form-select bg-card rounded-3" onchange="toggleCustomUrlInput(this)">
+                                <option value="https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=600&q=80">Textbook / Books</option>
+                                <option value="https://images.unsplash.com/photo-1496181133206-80ce9b88a853?auto=format&fit=crop&w=600&q=80">Laptop / Computer</option>
+                                <option value="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=600&q=80">Sofa / Furniture</option>
+                                <option value="https://images.unsplash.com/photo-1485965120184-e220f721d03e?auto=format&fit=crop&w=600&q=80">Bicycle / Transport</option>
+                                <option value="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=600&q=80">Headphones / Tech</option>
+                                <option value="CUSTOM">Custom Image URL...</option>
+                            </select>
+                            <input type="url" id="itemCustomUrl" class="form-control bg-card rounded-3 mt-2 d-none" placeholder="https://example.com/image.jpg">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Description</label>
+                            <textarea id="itemDesc" class="form-control bg-card rounded-3" rows="3" placeholder="Detail condition, pickup location..." required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-success w-100 rounded-pill py-2.5 fw-semibold">Publish Listing</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal 4: Create BBS Thread -->
+    <div class="modal fade" id="newThreadModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content p-3">
+                <div class="modal-header border-0 pb-0">
+                    <h4 class="modal-title fw-bold"><i class="fa-solid fa-pen-to-square text-warning me-2"></i>New Discussion Thread</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="newThreadForm" onsubmit="handleCreateThread(event)">
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Thread Category</label>
+                            <select id="threadCategory" class="form-select bg-card rounded-3" required>
+                                <option value="Visa & Legal">Visa & Legal</option>
+                                <option value="Campus Life">Campus Life</option>
+                                <option value="Housing & Roommates">Housing & Roommates</option>
+                                <option value="Academic Help">Academic Help</option>
+                                <option value="General Chat">General Chat</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Title</label>
+                            <input type="text" id="threadTitle" class="form-control bg-card rounded-3" placeholder="What would you like to discuss or ask?" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Content</label>
+                            <textarea id="threadContent" class="form-control bg-card rounded-3" rows="4" placeholder="Provide details..." required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-warning text-white w-100 rounded-pill py-2.5 fw-semibold">Post Discussion</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal 5: View Item & Direct Message Seller -->
+    <div class="modal fade" id="viewItemModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content overflow-hidden">
+                <div class="modal-body p-0">
+                    <img id="viewItemImg" src="" class="w-100" style="height: 250px; object-fit: cover;">
+                    <div class="p-4">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <h4 class="fw-bold mb-0" id="viewItemTitle"></h4>
+                            <span class="fs-4 fw-bold text-success" id="viewItemPrice"></span>
+                        </div>
+                        <span class="badge bg-secondary mb-3" id="viewItemCategory"></span>
+                        <p class="text-muted" id="viewItemDesc"></p>
+                        
+                        <div class="p-3 rounded-3 mb-3 border" style="background: var(--pill-bg)">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div class="d-flex align-items-center">
+                                    <i class="fa-solid fa-user-circle fa-2x text-muted me-3"></i>
+                                    <div>
+                                        <div class="fw-bold" id="viewItemSeller"></div>
+                                        <small class="text-muted">Contact: <span id="viewItemContact" class="fw-semibold text-primary"></span></small>
+                                    </div>
+                                </div>
+                                <button class="btn btn-sm btn-primary-custom rounded-pill px-3" onclick="startDirectMessageFromItem()">
+                                    <i class="fa-solid fa-paper-plane me-1"></i> Send Message
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-end">
+                            <button class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal 6: View Thread Details & Reply -->
+    <div class="modal fade" id="viewThreadModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header border-0 pb-0">
+                    <span class="badge bg-primary px-3 py-2 rounded-pill" id="viewThreadCategory"></span>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <h3 class="fw-bold mb-3" id="viewThreadTitle"></h3>
+                    <div class="d-flex align-items-center justify-content-between mb-4">
+                        <div class="d-flex align-items-center">
+                            <img id="viewThreadAvatar" src="" class="avatar me-3">
+                            <div>
+                                <div class="fw-bold" id="viewThreadAuthor"></div>
+                                <div class="text-muted small" id="viewThreadTime"></div>
+                            </div>
+                        </div>
+                        <button class="btn btn-sm btn-outline-primary rounded-pill px-3" onclick="startDirectMessageFromThread()">
+                            <i class="fa-solid fa-envelope me-1"></i> Message Author
+                        </button>
+                    </div>
+                    
+                    <div class="p-3 rounded-3 mb-4 border" id="viewThreadContent" style="background: var(--pill-bg); white-space: pre-wrap;"></div>
+
+                    <h5 class="fw-bold mb-3"><i class="fa-solid fa-comments text-primary me-2"></i>Replies</h5>
+                    <div id="threadRepliesList" class="d-flex flex-column gap-3 mb-4">
+                        <!-- Dynamic replies -->
+                    </div>
+
+                    <form id="replyForm" onsubmit="handlePostReply(event)">
+                        <div class="mb-2">
+                            <textarea id="replyContent" class="form-control bg-card rounded-3" rows="2" placeholder="Write a respectful reply..." required></textarea>
+                        </div>
+                        <div class="text-end">
+                            <button type="submit" class="btn btn-primary-custom rounded-pill px-4">Submit Reply</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal 7: Private Messages Drawer / Dialog -->
+    <div class="modal fade" id="messagesModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header border-0 pb-0">
+                    <h4 class="modal-title fw-bold"><i class="fa-solid fa-paper-plane text-primary me-2"></i>Private Direct Messages</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <div class="row g-3">
+                        <!-- Conversations List -->
+                        <div class="col-md-4 border-end">
+                            <h6 class="fw-bold text-muted mb-3">Chats</h6>
+                            <div class="list-group list-group-flush" id="chatContactsList">
+                                <!-- Populated dynamically -->
+                            </div>
+                        </div>
+                        <!-- Chat Messages Window -->
+                        <div class="col-md-8">
+                            <div class="d-flex align-items-center mb-3 pb-2 border-bottom">
+                                <span class="fw-bold fs-6" id="chatActiveUser">Select a chat</span>
+                            </div>
+                            <div class="chat-box d-flex flex-column mb-3" id="chatBox">
+                                <div class="text-center text-muted small my-auto">Select or start a conversation to view messages.</div>
+                            </div>
+                            <form id="sendMessageForm" onsubmit="handleSendDM(event)" class="d-flex gap-2">
+                                <input type="text" id="dmInput" class="form-control bg-card rounded-pill" placeholder="Type a private message..." required disabled>
+                                <button type="submit" id="dmSendBtn" class="btn btn-primary-custom rounded-pill px-3" disabled><i class="fa-solid fa-paper-plane"></i></button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="footer py-4 mt-5">
+        <div class="container text-center">
+            <p class="mb-1 text-light">&copy; 2026 CampusSphere - International Student Management System</p>
+            <p class="small mb-0">Designed for HTML5 Course Assessment | Built with HTML5, CSS3, Bootstrap 5 & JavaScript</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap 5 JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Application JavaScript -->
+    <script>
+        // Global State & User Data
+        let currentUser = null;
+        let activeMarketItem = null;
+        let currentThreadId = null;
+        let activeDMContact = null;
+
+        // Sample Initial Data Dictionaries
+        let marketItems = [
+            { id: 1, title: "HSK 5 Standard Course Textbook + Workbook", category: "Textbooks", price: 65, condition: "Like New", seller: "Sarah Jenkins", contact: "WeChat: sj_china", image: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=600&q=80", desc: "Includes official practice exercises and clean notes. Great for HSK prep." },
+            { id: 2, title: "Ninebot Electric Scooter (Zhenjiang Campus)", category: "Electronics", price: 850, condition: "Good", seller: "Alex Chen", contact: "Phone: 18652849999", image: "https://images.unsplash.com/photo-1485965120184-e220f721d03e?auto=format&fit=crop&w=600&q=80", desc: "Battery lasts up to 30km per full charge. Essential for traveling around campus." },
+            { id: 3, title: "Ergonomic Desk Chair & Study Desk", category: "Furniture", price: 180, condition: "Fair", seller: "Maria Garcia", contact: "WeChat: maria_zg", image: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=600&q=80", desc: "Moving out after graduation. Pick up from Dormitory Building 4." },
+            { id: 4, title: "Electric Commuter Bike", category: "Electronics", price: 1350, condition: "Good", seller: "Demo Seller", contact: "Demo listing", image: "https://images.unsplash.com/photo-1571068316344-75bc76f77890?auto=format&fit=crop&w=600&q=80", desc: "Demo listing for a campus commuter bike. Check the battery and arrange a test ride before purchase." },
+            { id: 5, title: "Foldable Electric Bike", category: "Electronics", price: 1680, condition: "Like New", seller: "Demo Seller", contact: "Demo listing", image: "https://images.unsplash.com/photo-1485965120184-e220f721d03e?auto=format&fit=crop&w=600&q=80", desc: "Compact demo bike listing, convenient for short trips around campus." },
+            { id: 6, title: "Student Laptop", category: "Electronics", price: 2200, condition: "Good", seller: "Demo Seller", contact: "Demo listing", image: "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?auto=format&fit=crop&w=600&q=80", desc: "Demo laptop listing for study, video calls, and everyday coursework." },
+            { id: 7, title: "Unlocked Smartphone", category: "Electronics", price: 980, condition: "Good", seller: "Demo Seller", contact: "Demo listing", image: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=600&q=80", desc: "Demo phone listing. Confirm model, condition, and network compatibility with the seller." },
+            { id: 8, title: "Chinese Language Textbook Set", category: "Textbooks", price: 90, condition: "Good", seller: "Demo Seller", contact: "Demo listing", image: "https://images.unsplash.com/photo-1495446815901-a7297e633e8d?auto=format&fit=crop&w=600&q=80", desc: "Demo set of language and course books for students. Check the included editions." },
+            { id: 9, title: "Dorm Study Lamp", category: "Furniture", price: 45, condition: "Like New", seller: "Demo Seller", contact: "Demo listing", image: "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?auto=format&fit=crop&w=600&q=80", desc: "Compact desk lamp demo listing, suitable for a dorm study desk." },
+            { id: 10, title: "Dorm Mini Fridge", category: "Furniture", price: 320, condition: "Good", seller: "Demo Seller", contact: "Demo listing", image: "https://images.unsplash.com/photo-1584568694244-14fbdf83bd30?auto=format&fit=crop&w=600&q=80", desc: "Demo mini-fridge listing. Confirm dorm rules and dimensions before arranging pickup." },
+            { id: 11, title: "Badminton Racket", category: "Others", price: 120, condition: "Good", seller: "Demo Seller", contact: "Demo listing", image: "https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?auto=format&fit=crop&w=600&q=80", desc: "Lightweight demo badminton racket for campus games. Check grip and strings before purchase." },
+            { id: 12, title: "Portable Power Bank", category: "Electronics", price: 80, condition: "Like New", seller: "Demo Seller", contact: "Demo listing", image: "https://images.unsplash.com/photo-1609091839311-d5365f9ff1c5?auto=format&fit=crop&w=600&q=80", desc: "Useful demo power bank listing for classes and travel. Confirm capacity and charging ports with the seller." }
+        ];
+
+        let bbsThreads = [
+            { id: 1, category: "Visa & Legal", title: "JW202 Form & Police Station Residence Registration Guide", author: "Admin Team", avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80", time: "2 hours ago", views: 342, content: "All international students arriving in Zhenjiang must complete local police registration within 24 hours...", replies: [{ author: "David K.", avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=100&q=80", time: "1 hour ago", text: "Very helpful! Do we need to bring the original lease contract?" }] },
+            { id: 2, category: "Campus Life", title: "Best places for international food & groceries near campus?", author: "Rahul Sharma", avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=100&q=80", time: "Yesterday", views: 215, content: "Looking for supermarkets carrying imported seasonings, halal food, and coffee beans.", replies: [] }
+        ];
+
+        let conversations = [
+            { contactName: "Sarah Jenkins", messages: [{ sender: "Sarah Jenkins", text: "Hi! Is the textbook still available for pick up near Dorm 3?" }] }
+        ];
+
+        // Section Switching Navigation Logic
+        function showSection(sectionId) {
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.add('d-none');
+            });
+
+            const activeSection = document.getElementById(sectionId);
+            if (activeSection) {
+                activeSection.classList.remove('d-none');
+            }
+
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            const activeNavBtn = document.getElementById(`nav-${sectionId}`);
+            if (activeNavBtn) {
+                activeNavBtn.classList.add('active');
+            }
+
+            if (sectionId === 'marketSection') {
+                renderMarketplace(marketItems);
+            } else if (sectionId === 'bbsSection') {
+                renderBBS(bbsThreads);
+            }
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function openForumCategory(category) {
+            showSection('bbsSection');
+            document.getElementById('bbsSearchInput').value = '';
+            const categoryButton = document.querySelector(`#bbsCategoryTabs [data-category="${category}"]`);
+            if (categoryButton) {
+                filterBBS(category, categoryButton);
+            }
+        }
+
+        // Theme Switcher (Dark/Light Mode)
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', newTheme);
+
+            const themeIcon = document.getElementById('themeIcon');
+            if (themeIcon) {
+                themeIcon.className = newTheme === 'dark' ? 'fa-solid fa-sun text-warning' : 'fa-solid fa-moon';
+            }
+        }
+
+        // Initialize default view on load
+        window.onload = function() {
+            renderMarketplace(marketItems);
+            renderBBS(bbsThreads);
+            updateHomeDashboard();
+        };
+
+        // Reliable Modal Controllers
+        function openModal(modalId) {
+            const modalElement = document.getElementById(modalId);
+            if (!modalElement) return;
+            const modalInstance = bootstrap.Modal.getOrCreateInstance(modalElement);
+            modalInstance.show();
+        }
+
+        function closeModal(modalId) {
+            const modalElement = document.getElementById(modalId);
+            if (!modalElement) return;
+            const modalInstance = bootstrap.Modal.getInstance(modalElement);
+            if (modalInstance) {
+                modalInstance.hide();
+            }
+        }
+
+        function openLoginModal() {
+            openModal('loginModal');
+        }
+
+        function openRegisterModal() {
+            openModal('registerModal');
+        }
+
+        function switchToRegisterModal() {
+            closeModal('loginModal');
+            setTimeout(() => {
+                openRegisterModal();
+            }, 250);
+        }
+
+        function switchToLoginModal() {
+            closeModal('registerModal');
+            setTimeout(() => {
+                openLoginModal();
+            }, 250);
+        }
+
+        // Auth Handlers
+        function handleLogin(e) {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const derivedName = email.split('@')[0].replace('.', ' ').toUpperCase();
+
+            currentUser = {
+                name: derivedName || "International Student",
+                email: email,
+                studentId: "INT-2026-8842",
+                country: "International",
+                avatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&q=80"
+            };
+
+            updateUIForAuth();
+            closeModal('loginModal');
+            showToast(`Welcome back, ${currentUser.name}!`, "success");
+        }
+
+        function handleRegister(e) {
+            e.preventDefault();
+            const name = document.getElementById('regName').value.trim();
+            const email = document.getElementById('regEmail').value.trim();
+            const studentId = document.getElementById('regStudentID').value.trim();
+            const country = document.getElementById('regCountry').value.trim();
+
+            currentUser = {
+                name: name,
+                email: email,
+                studentId: studentId,
+                country: country,
+                avatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&q=80"
+            };
+
+            updateUIForAuth();
+            closeModal('registerModal');
+            document.getElementById('registerForm').reset();
+            showToast(`Welcome, ${currentUser.name}! Account registered successfully.`, "success");
+        }
+
+        function updateUIForAuth() {
+            if (currentUser) {
+                document.getElementById('authControls').classList.remove('d-flex');
+                document.getElementById('authControls').classList.add('d-none');
+                document.getElementById('userState').classList.remove('d-none');
+                document.getElementById('userState').classList.add('d-flex');
+                
+                document.getElementById('currentUserDisplay').innerText = currentUser.name;
+                document.getElementById('navUserAvatar').src = currentUser.avatar;
+            }
+        }
+
+        // Profile Editing Functions
+        function openEditProfileModal() {
+            if (!currentUser) {
+                showToast("Please log in first.", "warning");
+                return;
+            }
+
+            document.getElementById('profileName').value = currentUser.name;
+            document.getElementById('profileEmail').value = currentUser.email;
+            document.getElementById('profileStudentID').value = currentUser.studentId;
+            document.getElementById('profileCountry').value = currentUser.country;
+            document.getElementById('profileAvatarUrl').value = currentUser.avatar;
+            document.getElementById('profileModalAvatar').src = currentUser.avatar;
+
+            openModal('profileModal');
+        }
+
+        function previewAvatarUrl(url) {
+            if (url && url.startsWith('http')) {
+                document.getElementById('profileModalAvatar').src = url;
+            }
+        }
+
+        function handleAvatarFileUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const result = e.target.result;
+                    document.getElementById('profileModalAvatar').src = result;
+                    document.getElementById('profileAvatarUrl').value = result;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function handleSaveProfile(e) {
+            e.preventDefault();
+            if (!currentUser) return;
+
+            currentUser.name = document.getElementById('profileName').value.trim();
+            currentUser.email = document.getElementById('profileEmail').value.trim();
+            currentUser.studentId = document.getElementById('profileStudentID').value.trim();
+            currentUser.country = document.getElementById('profileCountry').value.trim();
+            currentUser.avatar = document.getElementById('profileAvatarUrl').value || currentUser.avatar;
+
+            updateUIForAuth();
+            closeModal('profileModal');
+            showToast("Profile information updated successfully!", "success");
+        }
+
+        function logoutUser() {
+            currentUser = null;
+            document.getElementById('authControls').classList.remove('d-none');
+            document.getElementById('authControls').classList.add('d-flex');
+            document.getElementById('userState').classList.remove('d-flex');
+            document.getElementById('userState').classList.add('d-none');
+            showSection('homeSection');
+            showToast("You have been logged out.", "info");
+        }
+
+        function checkAuthAndOpenModal(modalId) {
+            if (!currentUser) {
+                showToast("Please log in first to proceed.", "warning");
+                openLoginModal();
+            } else {
+                openModal(modalId);
+            }
+        }
+
+        // Custom Image URL Input toggle for post modal
+        function toggleCustomUrlInput(selectEl) {
+            const customInput = document.getElementById('itemCustomUrl');
+            if (selectEl.value === 'CUSTOM') {
+                customInput.classList.remove('d-none');
+                customInput.required = true;
+            } else {
+                customInput.classList.add('d-none');
+                customInput.required = false;
+            }
+        }
+
+        // Post Item Handler
+        function handlePostItem(e) {
+            e.preventDefault();
+            const title = document.getElementById('itemTitle').value;
+            const category = document.getElementById('itemCategory').value;
+            const price = parseFloat(document.getElementById('itemPrice').value);
+            const condition = document.getElementById('itemCondition').value;
+            const contact = document.getElementById('itemContact').value;
+            const desc = document.getElementById('itemDesc').value;
+
+            const presetSelect = document.getElementById('itemImgPreset');
+            const customUrl = document.getElementById('itemCustomUrl').value;
+            const image = presetSelect.value === 'CUSTOM' ? customUrl : presetSelect.value;
+
+            const newItem = {
+                id: marketItems.length + 1,
+                title,
+                category,
+                price,
+                condition,
+                seller: currentUser ? currentUser.name : "Student",
+                contact,
+                image,
+                desc
+            };
+
+            marketItems.unshift(newItem);
+            renderMarketplace(marketItems);
+            updateHomeDashboard();
+            closeModal('postItemModal');
+            document.getElementById('postItemForm').reset();
+            showToast("Item listed for sale successfully!", "success");
+        }
+
+        // Marketplace Dynamic Rendering & Actions
+        function renderMarketplace(items) {
+            const grid = document.getElementById('marketGrid');
+            grid.innerHTML = '';
+
+            if (items.length === 0) {
+                grid.innerHTML = `<div class="col-12 text-center py-5"><i class="fa-solid fa-box-open fa-3x text-muted mb-3"></i><p class="text-muted">No items found matching your filter.</p></div>`;
+                return;
+            }
+
+            items.forEach(item => {
+                const card = `
+                    <div class="col-sm-6 col-lg-3">
+                        <div class="card product-card h-100 position-relative">
+                            <span class="badge-condition">${item.condition}</span>
+                            <img src="${item.image}" class="product-img" alt="${item.title}">
+                            <div class="card-body d-flex flex-column p-4">
+                                <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill mb-2 align-self-start small fw-semibold">${item.category}</span>
+                                <h6 class="card-title fw-bold text-truncate mb-1">${item.title}</h6>
+                                <p class="text-muted small text-truncate mb-3">${item.desc}</p>
+                                <div class="mt-auto d-flex justify-content-between align-items-center">
+                                    <span class="fs-5 fw-bold text-success">¥${item.price.toFixed(2)}</span>
+                                    <button class="btn btn-sm btn-outline-primary rounded-pill px-3 fw-semibold" onclick="viewMarketItem(${item.id})">Details</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                grid.innerHTML += card;
+            });
+        }
+
+        function updateHomeDashboard() {
+            document.getElementById('statItems').textContent = marketItems.length;
+            document.getElementById('statThreads').textContent = bbsThreads.length;
+            document.getElementById('statCategories').textContent = new Set(marketItems.map(item => item.category)).size;
+
+            const listingsContainer = document.getElementById('homeRecentListings');
+            listingsContainer.replaceChildren();
+            if (marketItems.length === 0) {
+                listingsContainer.textContent = 'No listings yet. Check back soon.';
+            } else {
+                marketItems.slice(0, 3).forEach(item => {
+                    listingsContainer.appendChild(createHomeActivityButton(
+                        item.title,
+                        `${item.category} | ¥${Number(item.price).toFixed(2)}`,
+                        () => openMarketItemFromHome(item.id)
+                    ));
+                });
+            }
+
+            const threadsContainer = document.getElementById('homeRecentThreads');
+            threadsContainer.replaceChildren();
+            if (bbsThreads.length === 0) {
+                threadsContainer.textContent = 'No discussions yet. Start the first conversation.';
+            } else {
+                bbsThreads.slice(0, 3).forEach(thread => {
+                    threadsContainer.appendChild(createHomeActivityButton(
+                        thread.title,
+                        `${thread.category} | ${thread.author}`,
+                        () => openThreadFromHome(thread.id)
+                    ));
+                });
+            }
+        }
+
+        function openMarketItemFromHome(id) {
+            showSection('marketSection');
+            document.getElementById('marketSearchInput').value = '';
+            document.getElementById('marketCategorySelect').value = 'All';
+            renderMarketplace(marketItems);
+            viewMarketItem(id);
+        }
+
+        function openThreadFromHome(id) {
+            showSection('bbsSection');
+            document.getElementById('bbsSearchInput').value = '';
+            const allTopicsButton = document.querySelector('#bbsCategoryTabs [data-category="All"]');
+            if (allTopicsButton) {
+                filterBBS('All', allTopicsButton);
+            }
+            viewThread(id);
+        }
+
+        function createHomeActivityButton(title, detail, onClick) {
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.className = 'home-activity-button';
+
+            const titleElement = document.createElement('span');
+            titleElement.className = 'fw-semibold';
+            titleElement.textContent = title;
+
+            const detailElement = document.createElement('span');
+            detailElement.className = 'text-muted small';
+            detailElement.textContent = detail;
+
+            button.append(titleElement, detailElement);
+            button.addEventListener('click', onClick);
+            return button;
+        }
+
+        function filterMarketplace() {
+            const query = document.getElementById('marketSearchInput').value.toLowerCase();
+            const category = document.getElementById('marketCategorySelect').value;
+
+            const filtered = marketItems.filter(item => {
+                const matchesQuery = item.title.toLowerCase().includes(query) || item.desc.toLowerCase().includes(query);
+                const matchesCategory = category === 'All' || item.category === category;
+                return matchesQuery && matchesCategory;
+            });
+
+            renderMarketplace(filtered);
+        }
+
+        function viewMarketItem(id) {
+            const item = marketItems.find(i => i.id === id);
+            if (!item) return;
+            activeMarketItem = item;
+
+            document.getElementById('viewItemImg').src = item.image;
+            document.getElementById('viewItemTitle').innerText = item.title;
+            document.getElementById('viewItemPrice').innerText = '¥' + item.price.toFixed(2);
+            document.getElementById('viewItemCategory').innerText = item.category + ' • ' + item.condition;
+            document.getElementById('viewItemDesc').innerText = item.desc;
+            document.getElementById('viewItemSeller').innerText = item.seller;
+            document.getElementById('viewItemContact').innerText = item.contact;
+
+            openModal('viewItemModal');
+        }
+
+        // Direct Messaging Logic
+        function startDirectMessageFromItem() {
+            if (!currentUser) {
+                showToast("Please log in to send direct messages.", "warning");
+                return;
+            }
+            closeModal('viewItemModal');
+            openMessagesModal(activeMarketItem.seller);
+        }
+
+        function startDirectMessageFromThread() {
+            if (!currentUser) {
+                showToast("Please log in to send direct messages.", "warning");
+                return;
+            }
+            const thread = bbsThreads.find(t => t.id === currentThreadId);
+            if (!thread) return;
+
+            closeModal('viewThreadModal');
+            openMessagesModal(thread.author);
+        }
+
+        function openMessagesModal(targetUser = null) {
+            if (!currentUser) {
+                showToast("Please log in to view your inbox.", "warning");
+                return;
+            }
+
+            if (targetUser && targetUser !== currentUser.name) {
+                let existingConv = conversations.find(c => c.contactName === targetUser);
+                if (!existingConv) {
+                    existingConv = { contactName: targetUser, messages: [] };
+                    conversations.push(existingConv);
+                }
+                activeDMContact = targetUser;
+            } else if (!activeDMContact && conversations.length > 0) {
+                activeDMContact = conversations[0].contactName;
+            }
+
+            renderContactsList();
+            renderActiveChat();
+
+            openModal('messagesModal');
+        }
+
+        function renderContactsList() {
+            const list = document.getElementById('chatContactsList');
+            list.innerHTML = '';
+
+            conversations.forEach(conv => {
+                const isActive = conv.contactName === activeDMContact ? 'active' : '';
+                const item = `
+                    <button class="list-group-item list-group-item-action ${isActive} py-3 border-0 rounded-3 mb-1" onclick="selectDMContact('${conv.contactName}')">
+                        <div class="fw-bold text-truncate">${conv.contactName}</div>
+                        <small class="text-muted text-truncate d-block">${conv.messages.length > 0 ? conv.messages[conv.messages.length - 1].text : 'No messages yet'}</small>
+                    </button>
+                `;
+                list.innerHTML += item;
+            });
+        }
+
+        function selectDMContact(name) {
+            activeDMContact = name;
+            renderContactsList();
+            renderActiveChat();
+        }
+
+        function renderActiveChat() {
+            const chatBox = document.getElementById('chatBox');
+            const chatUserTitle = document.getElementById('chatActiveUser');
+            const dmInput = document.getElementById('dmInput');
+            const dmSendBtn = document.getElementById('dmSendBtn');
+
+            if (!activeDMContact) {
+                chatUserTitle.innerText = "Select a chat";
+                chatBox.innerHTML = '<div class="text-center text-muted small my-auto">Select or start a conversation.</div>';
+                dmInput.disabled = true;
+                dmSendBtn.disabled = true;
+                return;
+            }
+
+            chatUserTitle.innerText = activeDMContact;
+            dmInput.disabled = false;
+            dmSendBtn.disabled = false;
+
+            const conv = conversations.find(c => c.contactName === activeDMContact);
+            chatBox.innerHTML = '';
+
+            if (!conv || conv.messages.length === 0) {
+                chatBox.innerHTML = '<div class="text-center text-muted small my-auto">No messages yet. Send a greeting!</div>';
+                return;
+            }
+
+            conv.messages.forEach(msg => {
+                const isMe = msg.sender === currentUser.name;
+                const bubble = `
+                    <div class="msg-bubble ${isMe ? 'msg-sent' : 'msg-received'}">
+                        <div>${msg.text}</div>
+                    </div>
+                `;
+                chatBox.innerHTML += bubble;
+            });
+
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        function handleSendDM(e) {
+            e.preventDefault();
+            const dmInput = document.getElementById('dmInput');
+            const text = dmInput.value.trim();
+
+            if (!text || !activeDMContact) return;
+
+            let conv = conversations.find(c => c.contactName === activeDMContact);
+            if (!conv) {
+                conv = { contactName: activeDMContact, messages: [] };
+                conversations.push(conv);
+            }
+
+            conv.messages.push({
+                sender: currentUser.name,
+                text: text
+            });
+
+            dmInput.value = '';
+            renderActiveChat();
+            renderContactsList();
+        }
+
+        // BBS Dynamic Functions
+        function renderBBS(threads) {
+            const list = document.getElementById('bbsThreadList');
+            list.innerHTML = '';
+
+            if (threads.length === 0) {
+                list.innerHTML = `<div class="text-center py-5 bg-card rounded-4 shadow-sm"><p class="text-muted mb-0">No forum threads found.</p></div>`;
+                return;
+            }
+
+            threads.forEach(t => {
+                const item = `
+                    <div class="bbs-card p-4 shadow-sm cursor-pointer" onclick="viewThread(${t.id})">
+                        <div class="d-flex align-items-center justify-content-between mb-2">
+                            <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle rounded-pill px-3">${t.category}</span>
+                            <small class="text-muted"><i class="fa-regular fa-clock me-1"></i>${t.time}</small>
+                        </div>
+                        <h5 class="fw-bold mb-2">${t.title}</h5>
+                        <p class="text-muted small text-truncate mb-3">${t.content}</p>
+                        <div class="d-flex align-items-center justify-content-between border-top pt-3">
+                            <div class="d-flex align-items-center">
+                                <img src="${t.avatar}" class="avatar me-2">
+                                <span class="fw-semibold small">${t.author}</span>
+                            </div>
+                            <div class="text-muted small d-flex gap-3">
+                                <span><i class="fa-regular fa-eye me-1"></i>${t.views}</span>
+                                <span><i class="fa-regular fa-comment me-1"></i>${t.replies.length} Replies</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                list.innerHTML += item;
+            });
+        }
+
+        function filterBBS(category, btnElement) {
+            if(btnElement) {
+                document.querySelectorAll('#bbsCategoryTabs button').forEach(b => {
+                    b.classList.remove('btn-primary', 'active');
+                    b.classList.add('btn-outline-secondary');
+                });
+                btnElement.classList.remove('btn-outline-secondary');
+                btnElement.classList.add('btn-primary', 'active');
+            }
+
+            const query = document.getElementById('bbsSearchInput').value.toLowerCase();
+            const filtered = bbsThreads.filter(t => {
+                const matchesCat = (category === 'All' || t.category === category);
+                const matchesQuery = t.title.toLowerCase().includes(query) || t.content.toLowerCase().includes(query);
+                return matchesCat && matchesQuery;
+            });
+
+            renderBBS(filtered);
+        }
+
+        function searchBBS() {
+            const activeBtn = document.querySelector('#bbsCategoryTabs button.active');
+            const category = activeBtn ? activeBtn.innerText : 'All Topics';
+            filterBBS(category === 'All Topics' ? 'All' : category, null);
+        }
+
+        function handleCreateThread(e) {
+            e.preventDefault();
+            const newThread = {
+                id: bbsThreads.length + 1,
+                category: document.getElementById('threadCategory').value,
+                title: document.getElementById('threadTitle').value,
+                author: currentUser ? currentUser.name : "Anonymous Student",
+                avatar: currentUser ? currentUser.avatar : "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=100&q=80",
+                time: "Just now",
+                views: 1,
+                content: document.getElementById('threadContent').value,
+                replies: []
+            };
+
+            bbsThreads.unshift(newThread);
+            renderBBS(bbsThreads);
+            updateHomeDashboard();
+
+            closeModal('newThreadModal');
+            document.getElementById('newThreadForm').reset();
+            showToast("New thread published!", "success");
+        }
+
+        function viewThread(id) {
+            currentThreadId = id;
+            const thread = bbsThreads.find(t => t.id === id);
+            if (!thread) return;
+
+            thread.views += 1;
+            renderBBS(bbsThreads);
+
+            document.getElementById('viewThreadCategory').innerText = thread.category;
+            document.getElementById('viewThreadTitle').innerText = thread.title;
+            document.getElementById('viewThreadAuthor').innerText = thread.author;
+            document.getElementById('viewThreadAvatar').src = thread.avatar;
+            document.getElementById('viewThreadTime').innerText = thread.time;
+            document.getElementById('viewThreadContent').innerText = thread.content;
+
+            renderThreadReplies(thread.replies);
+
+            openModal('viewThreadModal');
+        }
+
+        function renderThreadReplies(replies) {
+            const repliesContainer = document.getElementById('threadRepliesList');
+            repliesContainer.innerHTML = '';
+
+            if (replies.length === 0) {
+                repliesContainer.innerHTML = `<p class="text-muted small">No replies yet. Be the first to share your thoughts!</p>`;
+                return;
+            }
+
+            replies.forEach(r => {
+                const card = `
+                    <div class="p-3 rounded-3 border-start border-4 border-primary" style="background: var(--pill-bg)">
+                        <div class="d-flex align-items-center mb-2">
+                            <img src="${r.avatar}" class="avatar me-2" style="width:32px; height:32px;">
+                            <span class="fw-bold small me-2">${r.author}</span>
+                            <small class="text-muted ms-auto">${r.time}</small>
+                        </div>
+                        <p class="mb-0 small">${r.text}</p>
+                    </div>
+                `;
+                repliesContainer.innerHTML += card;
+            });
+        }
+
+        function handlePostReply(e) {
+            e.preventDefault();
+            if (!currentUser) {
+                showToast("Please log in to submit a reply.", "warning");
+                return;
+            }
+
+            const text = document.getElementById('replyContent').value;
+            const thread = bbsThreads.find(t => t.id === currentThreadId);
+            
+            if (thread) {
+                thread.replies.push({
+                    author: currentUser.name,
+                    avatar: currentUser.avatar,
+                    time: "Just now",
+                    text: text
+                });
+
+                renderThreadReplies(thread.replies);
+                renderBBS(bbsThreads);
+                document.getElementById('replyForm').reset();
+                showToast("Reply added!", "success");
+            }
+        }
+
+        function openUserItems() {
+            showSection('marketSection');
+            showToast("Showing marketplace items.", "info");
+        }
+
+        // Helper Toast Notification
+        function showToast(message, type = "info") {
+            const toastContainer = document.getElementById('toastContainer');
+            const bgClass = type === 'success' ? 'bg-success' : type === 'warning' ? 'bg-warning text-dark' : type === 'danger' ? 'bg-danger' : 'bg-dark';
+            
+            const toastEl = document.createElement('div');
+            toastEl.className = `toast align-items-center text-white ${bgClass} border-0 show shadow-lg`;
+            toastEl.setAttribute('role', 'alert');
+            toastEl.innerHTML = `
+                <div class="d-flex">
+                    <div class="toast-body fw-medium">
+                        ${message}
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+                </div>
+            `;
+            
+            toastContainer.appendChild(toastEl);
+            setTimeout(() => {
+                toastEl.remove();
+            }, 3500);
+        }
+    </script>
+</body>
+</html>
